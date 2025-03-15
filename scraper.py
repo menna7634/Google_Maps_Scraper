@@ -87,12 +87,6 @@ def scrape_google_maps(search_query):
             data['Google Maps Link'] = item.find_element(By.CSS_SELECTOR, "a").get_attribute('href')
         except:
             data['Google Maps Link'] = None
-
-        try:
-            data['Website'] = item.find_element(By.CSS_SELECTOR, 'div > a').get_attribute('href')
-        except:
-            data['Website'] = None
-
         try:
             rating_text = item.find_element(By.CSS_SELECTOR, '.fontBodyMedium > span[role="img"]').get_attribute('aria-label')
             rating_numbers = [float(num.replace(",", ".")) for num in rating_text.split(" ") if num.replace(",", ".").replace(".", "", 1).isdigit()]
@@ -110,6 +104,20 @@ def scrape_google_maps(search_query):
             data['Phone'] = matches[0][0] if matches else None
         except:
             data['Phone'] = None
+
+        try:
+            website_element = item.find_element(By.CSS_SELECTOR, 'a.lcr4fd.S9kvJb')
+            website_url = website_element.get_attribute('href')
+            if "googleadservices.com" in website_url:
+               data['Website'] = None 
+                
+            else:
+                data['Website'] = website_url
+        except:
+            data['Website'] = None
+
+
+
 
         if data['Business Name']:
             results.append(data)
