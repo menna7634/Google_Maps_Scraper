@@ -4,3 +4,9 @@ pandas
 webdriver-manager
 requests
 aiohttp
+flask-mail
+pyotp
+flask-sqlalchemy
+flask-jwt-extended
+bcrypt
+Flask-Migrate

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        table { width: 80%; margin: auto; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+
+    <h2>Users List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Verified</th>
+                <th>Can Access</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            <!-- Users will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        function fetchUsers() {
+            fetch("http://127.0.0.1:5000/users")
+                .then(response => response.json())
+                .then(data => {
+                    const userTableBody = document.getElementById("userTableBody");
+                    userTableBody.innerHTML = ""; // Clear previous content
+
+                    data.users.forEach(user => {
+                        const row = `<tr>
+                            <td>${user.id}</td>
+                            <td>${user.email}</td>
+                            <td>${user.is_verified ? "✅" : "❌"}</td>
+                            <td>${user.can_access ? "✅" : "❌"}</td>
+                        </tr>`;
+                        userTableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error fetching users:", error));
+        }
+
+        window.onload = fetchUsers; // Fetch users when the page loads
+    </script>
+
+</body>
+</html>

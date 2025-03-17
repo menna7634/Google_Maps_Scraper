@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 8px; margin: 10px; width: 200px; }
+        button { padding: 10px 15px; cursor: pointer; background-color: red; color: white; border: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Delete User</h2>
+    <input type="number" id="userId" placeholder="Enter User ID">
+    <button onclick="deleteUser()">Delete</button>
+    
+    <p id="response"></p>
+
+    <script>
+        function deleteUser() {
+            const userId = document.getElementById("userId").value;
+            if (!userId) {
+                alert("Please enter a user ID");
+                return;
+            }
+
+            fetch(`http://127.0.0.1:5000/delete_user/${userId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" }
+})
+.then(response => response.json())
+.then(data => {
+    document.getElementById("response").innerText = data.message || data.error;
+})
+.catch(error => {
+    document.getElementById("response").innerText = "Error deleting user";
+    console.error("Error:", error);
+});
+
+        }
+    </script>
+
+</body>
+</html>
