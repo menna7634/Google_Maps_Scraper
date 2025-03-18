@@ -17,6 +17,8 @@
         </form>
         <div id="loader" class="loader"></div>
         <p id="error-message" class="error"></p>
+        <p>Don't have an account? <a href="{{ url_for('signup_page') }}">Sign up</a></p>
+
     </div>
 
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>

@@ -1,0 +1,109 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Card */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+}
+
+/* Title */
+h2 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Subtitle */
+.subtitle {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+/* Input Field */
+.input-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Loader */
+.loader {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 3px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Error Message */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

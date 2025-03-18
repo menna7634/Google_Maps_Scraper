@@ -9,34 +9,43 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from Auth.auth import auth_bp
 from Auth.database import User
+from flask_session import Session
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app,supports_credentials=True)
 app.config.from_object(Config)
 app.secret_key = "9a33212b6561cfe796eb7199f0257ced7236ce22020d8319a19fa1917b312516"  
+# Configure Flask-Session
+app.config["SESSION_TYPE"] = "filesystem"  
+app.config["SESSION_PERMANENT"] = False  
+app.config["SESSION_COOKIE_HTTPONLY"] = True  
+app.config["SESSION_COOKIE_SECURE"] = False  
+Session(app)
 
 db.init_app(app)
 mail = Mail(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db) 
-# Register authentication blueprint
 app.register_blueprint(auth_bp, url_prefix="/auth")
-
 SCRAPING_DIR = "Results"
 os.makedirs(SCRAPING_DIR, exist_ok=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if "user_email" not in session:  # Ensure user is logged in
-        return redirect(url_for("login_page"))
-
+    
+    if not session.get("user_email"): 
+      return redirect(url_for("login_page"))  
+    
     csv_path = None
     if request.method == "POST":
         search_query = request.form.get("query")
         if search_query:
             csv_path = scrape_google_maps(search_query)
-
+            print("Session data:", session) 
     return render_template("index.html", csv_path=csv_path)
+
 
 @app.route("/download/<filename>")
 def download(filename):
@@ -86,15 +95,19 @@ def show_delete_page(user_id):
 @app.route("/delete_user/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
 
-    # Fetch user from the database
     user = User.query.get(user_id)  
 
-    if user:  # If the user exists, delete them
+    if user:  
         db.session.delete(user)
         db.session.commit()
         return jsonify({"message": f"User {user_id} deleted successfully"}), 200
 
     return jsonify({"error": "User not found"}), 404
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.pop("user_email", None)  
+    return jsonify({"message": "Logged out successfully", "redirect": "/login_page"})
 
 
 if __name__ == "__main__":

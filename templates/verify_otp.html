@@ -4,31 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verifyotp.css') }}">
     <script>
         async function verifyOTP() {
-            let email = document.getElementById("email").value;
             let otp = document.getElementById("otp").value;
+            let errorMessage = document.getElementById("error-message");
+            let button = document.getElementById("verify-btn");
+            let loader = document.getElementById("loader");
 
-            let response = await fetch("/verify", {
+            errorMessage.textContent = "";
+            button.disabled = true;
+            loader.style.display = "inline-block";
+
+            let response = await fetch("/auth/verify_otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, otp })
+                body: JSON.stringify({ otp })
             });
 
             let data = await response.json();
+            button.disabled = false;
+            loader.style.display = "none";
+
             if (response.ok) {
-                alert("OTP verified successfully!");
-                window.location.href = "/login_page"; // Redirect to login page
+                alert("✅ OTP verified successfully!");
+                window.location.href = "/login_page"; 
             } else {
-                alert(data.message);
+                errorMessage.textContent = data.message;
+                errorMessage.style.opacity = "1";
             }
         }
     </script>
 </head>
 <body>
-    <h2>Verify OTP</h2>
-    <input type="email" id="email" placeholder="Enter your email">
-    <input type="text" id="otp" placeholder="Enter OTP">
-    <button onclick="verifyOTP()">Verify</button>
+    <div class="container">
+        <div class="card">
+            <h2>🔐 Verify OTP</h2>
+            <p class="subtitle">Please enter the OTP sent to your email</p>
+
+            <div class="input-group">
+                <input type="text" id="otp" placeholder="Enter OTP" maxlength="6" required>
+            </div>
+
+            <button id="verify-btn" class="btn" onclick="verifyOTP()">
+                <span id="loader" class="loader"></span> Verify
+            </button>
+
+            <p id="error-message" class="error"></p>
+                    </div>
+    </div>
 </body>
 </html>

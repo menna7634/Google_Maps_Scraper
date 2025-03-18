@@ -10,3 +10,5 @@ flask-sqlalchemy
 flask-jwt-extended
 bcrypt
 Flask-Migrate
+flask_session
+flask_cors

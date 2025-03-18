@@ -7,19 +7,18 @@ async function login(event) {
     let loader = document.getElementById("loader");
     errorMessage.textContent = "";
 
-    // Input validation
     if (!email || !password) {
         errorMessage.textContent = "Please enter both email and password.";
         return;
     }
 
-    // Show loading spinner
     loader.style.display = "block";
 
     try {
         let response = await fetch("/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",  
             body: JSON.stringify({ email, password })
         });
 
@@ -27,8 +26,7 @@ async function login(event) {
         loader.style.display = "none"; 
 
         if (response.ok) {
-            localStorage.setItem("token", data.token); 
-            window.location.href = "/"; 
+            window.location.href = data.redirect; 
         } else {
             errorMessage.textContent = data.message || "Login failed. Try again.";
         }
