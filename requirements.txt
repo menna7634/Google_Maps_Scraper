@@ -12,3 +12,4 @@ bcrypt
 Flask-Migrate
 flask_session
 flask_cors
+gunicorn
