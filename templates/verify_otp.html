@@ -1,10 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/verifyotp.css') }}">
+    <style>
+        body {
+            background-color: hsl(0, 0%, 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .logo {
+            max-width: 200px;
+            /* Adjust width */
+            height: auto;
+            /* Maintain aspect ratio */
+            display: block;
+            margin: 0 auto 10px;
+            /* Center horizontally and add space below */
+        }
+
+        .card {
+            max-width: 900px;
+            margin-top: 50px;
+            background: linear-gradient(21deg, rgba(255, 211, 230, 1) 1%, rgba(219, 235, 255, 1) 38%);
+            padding: 30px;
+            border-radius: 10px;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            margin: 10px -10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .btn {
+            background: #a700ff;
+            height: 30px;
+            width: 80px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 6px;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        /* Error Message */
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Spinner Animation */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
     <script>
         async function verifyOTP() {
             let otp = document.getElementById("otp").value;
@@ -28,7 +119,7 @@
 
             if (response.ok) {
                 alert("✅ OTP verified successfully!");
-                window.location.href = "/login_page"; 
+                window.location.href = "/login_page";
             } else {
                 errorMessage.textContent = data.message;
                 errorMessage.style.opacity = "1";
@@ -36,7 +127,9 @@
         }
     </script>
 </head>
+
 <body>
+    <img src="logo.png" alt="Logo" class="logo">
     <div class="container">
         <div class="card">
             <h2>🔐 Verify OTP</h2>
@@ -51,7 +144,8 @@
             </button>
 
             <p id="error-message" class="error"></p>
-                    </div>
+        </div>
     </div>
 </body>
+
 </html>

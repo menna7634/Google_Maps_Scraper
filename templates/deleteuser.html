@@ -1,23 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete User</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        input { padding: 8px; margin: 10px; width: 200px; }
-        button { padding: 10px 15px; cursor: pointer; background-color: red; color: white; border: none; }
+        body {
+            background-color: hsl(0, 0%, 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .logo {
+            max-width: 200px;
+            /* Adjust width */
+            height: auto;
+            /* Maintain aspect ratio */
+            display: block;
+            margin: 0 auto 10px;
+            /* Center horizontally and add space below */
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            background: linear-gradient(21deg, rgba(255, 211, 230, 1) 1%, rgba(219, 235, 255, 1) 38%);
+            padding: 30px;
+            border-radius: 10px;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            margin: 10px -10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .btn {
+            background: #a700ff;
+            height: 30px;
+            width: 80px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 6px;
+        }
     </style>
 </head>
+
 <body>
+    <img src="logo.png" alt="Logo" class="logo">
 
-    <h2>Delete User</h2>
-    <input type="number" id="userId" placeholder="Enter User ID">
-    <button onclick="deleteUser()">Delete</button>
-    
-    <p id="response"></p>
+    <div class="container">
+        <h2>Delete User</h2>
+        <input type="number" id="userId" placeholder="Enter User ID">
+        <button class="btn" onclick="deleteUser()">Delete</button>
 
+        <p id="response"></p>
+    </div>
     <script>
         function deleteUser() {
             const userId = document.getElementById("userId").value;
@@ -27,20 +82,21 @@
             }
 
             fetch(`http://127.0.0.1:5000/delete_user/${userId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" }
-})
-.then(response => response.json())
-.then(data => {
-    document.getElementById("response").innerText = data.message || data.error;
-})
-.catch(error => {
-    document.getElementById("response").innerText = "Error deleting user";
-    console.error("Error:", error);
-});
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("response").innerText = data.message || data.error;
+                })
+                .catch(error => {
+                    document.getElementById("response").innerText = "Error deleting user";
+                    console.error("Error:", error);
+                });
 
         }
     </script>
 
 </body>
+
 </html>

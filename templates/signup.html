@@ -1,12 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <style>
+        body {
+            background-color: hsl(0, 0%, 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .logo {
+            max-width: 200px;
+            /* Adjust width */
+            height: auto;
+            /* Maintain aspect ratio */
+            display: block;
+            margin: 0 auto 10px;
+            /* Center horizontally and add space below */
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            background: linear-gradient(21deg, rgba(255, 211, 230, 1) 1%, rgba(219, 235, 255, 1) 38%);
+            padding: 30px;
+            border-radius: 10px;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .btn {
+            background: #a700ff;
+            height: 30px;
+            width: 80px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 6px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .loader {
+            display: none;
+            margin: 10px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
+    <img src="logo.png" alt="Logo" class="logo">
     <div class="container">
         <h2>Signup</h2>
         <form onsubmit="signup(event)">
@@ -20,4 +106,5 @@
 
     <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
 </body>
+
 </html>

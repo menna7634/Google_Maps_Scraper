@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask, jsonify, render_template, request, send_file, redirect, url_for, session
+from flask import Flask, jsonify, render_template, request, send_file, redirect, send_from_directory, url_for, session
 from scraper import scrape_google_maps
 from Auth.config import Config
 from flask_migrate import Migrate
@@ -16,7 +16,7 @@ from flask_socketio import SocketIO
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.config.from_object(Config)
-app.secret_key = os.urandom(24)  # Secure random key for production
+app.secret_key = os.urandom(24)  
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Flask-Session Configuration
@@ -110,6 +110,19 @@ def logout():
     session.pop("user_email", None)
     return jsonify({"message": "Logged out successfully", "redirect": "/login_page"})
 
+@app.route("/stop_scraping", methods=["POST"])
+def stop_scraping():
+    global is_scraping
+    if is_scraping:
+        is_scraping = False
+        socketio.emit("scraping_stopped", {"message": "Scraping has been stopped."})
+        return jsonify({"message": "Scraping stopped successfully"}), 200
+    else:
+        return jsonify({"error": "No scraping process running"}), 400
+@app.route('/logo.png')
+def serve_logo():
+    return send_from_directory('templates', 'logo.png')
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, host="0.0.0.0", port=port, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True)
