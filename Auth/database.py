@@ -4,10 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from werkzeug.security import generate_password_hash, check_password_hash
 from Auth.config import Config
-from flask_migrate import Migrate
-
+import os
 
 app = Flask(__name__)
+
+# ✅ Ensure the correct database URL is being used
+if not os.getenv("DATABASE_URL"):
+    print("⚠️ DATABASE_URL is not set! Using SQLite instead.")
+
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 mail = Mail(app)
@@ -30,4 +34,5 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
 if __name__ == "__main__":
+    print(f"✅ Connected to: {app.config['SQLALCHEMY_DATABASE_URI']}")
     app.run()
