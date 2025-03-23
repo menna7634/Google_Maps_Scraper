@@ -4,7 +4,10 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "default_secret_key")
 
     # Database
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///Scrapper.db")  
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "DATABASE_URL",
+        "postgresql://postgres:ycTIuAQfDQNwJSIFdXotuaIOiBuuArsY@postgres.railway.internal:5432/railway"
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # SMTP 

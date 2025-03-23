@@ -1,23 +1,24 @@
-from flask_migrate import Migrate
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_mail import Mail
 from werkzeug.security import generate_password_hash, check_password_hash
 from Auth.config import Config
-import os
 
 app = Flask(__name__)
-
-# ✅ Ensure the correct database URL is being used
-if not os.getenv("DATABASE_URL"):
-    print("⚠️ DATABASE_URL is not set! Using SQLite instead.")
-
 app.config.from_object(Config)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL", "postgresql://postgres:ycTIuAQfDQNwJSIFdXotuaIOiBuuArsY@postgres.railway.internal:5432/railway"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 db = SQLAlchemy(app)
 mail = Mail(app)
 migrate = Migrate(app, db)
 
 class User(db.Model):
+    __tablename__ = "users"  # Avoid SQL reserved keyword conflict
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
