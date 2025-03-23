@@ -37,10 +37,9 @@ mail = Mail(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
 app.register_blueprint(auth_bp, url_prefix="/auth")
-
 SCRAPING_DIR = "Results"
 os.makedirs(SCRAPING_DIR, exist_ok=True)
-
+is_scraping = False
 @app.route("/", methods=["GET", "POST"])
 def index():
     if "user_email" not in session:
@@ -113,7 +112,6 @@ def delete_user(user_id):
 @app.route("/logout", methods=["POST"])
 def logout():
     session.clear()
-    session.pop("user_email", None)
     return jsonify({"message": "Logged out successfully", "redirect": "/login_page"})
 
 @app.route("/stop_scraping", methods=["POST"])
