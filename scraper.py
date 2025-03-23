@@ -112,6 +112,24 @@ def scrape_google_maps(search_query):
             data['Website'] = None
             data['Email'] = None
 
+        try:
+            data['Phone Number'] = item.find_element(By.CSS_SELECTOR, '.UsdlK').text
+        except:
+            data['Phone Number'] = None
+
+        try:
+            data['Rating'] = item.find_element(By.CSS_SELECTOR, '.MW4etd').text
+        except:
+            data['Rating'] = None
+
+        try:
+         num_reviews_element = item.find_element(By.CSS_SELECTOR, '.UY7F9 span[dir="ltr"]')
+         data['Number of Reviews'] = num_reviews_element.text.strip("()") 
+        except:
+         data['Number of Reviews'] = None
+ 
+
+
         if data['Business Name']:
             results.append(data)
             scraping_count += 1  
