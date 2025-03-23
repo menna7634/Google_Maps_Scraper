@@ -69,23 +69,34 @@ def verify_otp():
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    data = request.json  
-    email = data.get("email")
-    password = data.get("password")
+    try:
+        data = request.json  
+        email = data.get("email")
+        password = data.get("password")
 
-    user = User.query.filter_by(email=email).first()
-    if not user or not bcrypt.checkpw(password.encode("utf-8"), user.password_hash.encode("utf-8")):
-        return jsonify({"message": "Invalid credentials"}), 401
+        user = User.query.filter_by(email=email).first()
 
-    if not user.is_verified:
-        return jsonify({"message": "Email not verified. Please complete OTP verification."}), 403
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+        
+        print(f"Stored password hash: {user.password_hash}")  # Debugging Line
 
-    if not user.can_access:
-        return jsonify({"message": "Access denied. Contact an admin."}), 403
+        if not bcrypt.checkpw(password.encode("utf-8"), user.password_hash.encode("utf-8")):
+            return jsonify({"message": "Invalid credentials"}), 401
 
-    session["user_email"] = email  
+        if not user.is_verified:
+            return jsonify({"message": "Email not verified. Please complete OTP verification."}), 403
 
-    return jsonify({"message": "you Login Successfully. Redirecting to Main page.", "redirect": "/"})
+        if not user.can_access:
+            return jsonify({"message": "Access denied. Contact an admin."}), 403
+
+        session["user_email"] = email  
+
+        return jsonify({"message": "You logged in successfully. Redirecting to Main page.", "redirect": "/"})
+
+    except Exception as e:
+        return jsonify({"message": f"Server error: {str(e)}"}), 500  # Print exact error
+
 
 
 @auth_bp.route("/verify_otp_page")

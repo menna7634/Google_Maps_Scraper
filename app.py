@@ -27,7 +27,9 @@ app.config["SESSION_USE_SIGNER"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax" 
 app.config["SESSION_COOKIE_HTTPONLY"] = True  
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("FLASK_ENV") == "production"
-redis_url = os.getenv("REDIS_URL") or os.getenv("REDIS_PUBLIC_URL")
+redis_url = os.getenv("REDIS_URL") or os.getenv("REDIS_PUBLIC_URL") or "redis://default:RvnLKqIfBGHzmFlSdecEClxQGMHtLqwQ@redis.railway.internal:6379"
+
+print(f"Redis URL: {redis_url}")  # Debugging line
 app.config["SESSION_REDIS"] = redis.from_url(redis_url)
 
 Session(app)
@@ -37,6 +39,7 @@ mail = Mail(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
 app.register_blueprint(auth_bp, url_prefix="/auth")
+
 SCRAPING_DIR = "Results"
 os.makedirs(SCRAPING_DIR, exist_ok=True)
 is_scraping = False
