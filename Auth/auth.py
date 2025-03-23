@@ -6,33 +6,49 @@ from Auth.database import db, User
 from Auth.otp import generate_otp, send_otp_email
 import pyotp
 import bcrypt
+from datetime import datetime, timedelta  
+
 
 auth_bp = Blueprint("auth", __name__)
 
-# Route: Signup
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
     try:
+        print("📌 Received a signup request.")  # Step 1: Check if the request is hitting the route
+
         data = request.get_json(silent=True)
+        print(f"📌 Parsed JSON data: {data}")  # Step 2: See what data is received
+
         if not data:
+            print("❌ Invalid JSON data received.")
             return jsonify({"message": "Invalid JSON data"}), 400
 
         email = data.get("email")
         password = data.get("password")
 
+        print(f"📌 Extracted email: {email}")  # Step 3: Print extracted email
+        print(f"📌 Extracted password: {'*' * len(password) if password else None}")  # Masked password for security
+
         if not email or not password:
+            print("❌ Missing email or password.")
             return jsonify({"message": "Email and password are required"}), 400
 
         # Check if user already exists
-        if User.query.filter_by(email=email).first():
+        existing_user = User.query.filter_by(email=email).first()
+        print(f"📌 Checking if user exists: {'Yes' if existing_user else 'No'}")  # Step 4: See if user exists
+
+        if existing_user:
+            print("❌ User already exists.")
             return jsonify({"message": "User already exists"}), 400
 
         # Hash Password
         password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+        print(f"📌 Hashed password: {password_hash[:10]}...")  # Print part of hash for debugging
 
         # Generate a 6-digit OTP
         otp_code = str(random.randint(100000, 999999))
-        otp_expires_at = datetime.utcnow() + datetime.timedelta(minutes=10)  # OTP valid for 10 minutes
+        otp_expires_at = datetime.utcnow() + timedelta(minutes=10)
+        print(f"📌 Generated OTP: {otp_code} (expires at {otp_expires_at})")  # Step 5: Print OTP details
 
         # Create New User
         new_user = User(
@@ -44,19 +60,27 @@ def signup():
         )
         db.session.add(new_user)
         db.session.commit()
+        print("✅ User added to the database.")
 
         # Send OTP to email
         send_otp_email(email, otp_code)
+        print(f"📩 OTP sent to {email}")
 
         # Store Email in Session
         session["pending_email"] = email
         session["otp_attempts"] = 0
         session.modified = True
+        print(f"📌 Session updated: {session}")
 
         return jsonify({"message": "User registered successfully. Redirecting to OTP page.", "redirect": "/auth/verify_otp_page"})
-    
+
     except Exception as e:
-        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+        print(f"❌ ERROR: {e}")  # Print the error in console
+        return jsonify({
+            "message": "An error occurred.",
+            "error": str(e)  # Shows the exact error
+        }), 500
+
 @auth_bp.route("/verify_otp", methods=["POST"])
 def verify_otp():
     data = request.json
