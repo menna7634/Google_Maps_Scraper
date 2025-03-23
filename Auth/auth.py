@@ -1,3 +1,5 @@
+import datetime
+import random
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, session
 from flask_jwt_extended import create_access_token
 from Auth.database import db, User
@@ -25,32 +27,36 @@ def signup():
         if User.query.filter_by(email=email).first():
             return jsonify({"message": "User already exists"}), 400
 
-        # Generate OTP Secret and Hash Password
-        otp_secret = pyotp.random_base32()
+        # Hash Password
         password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
+        # Generate a 6-digit OTP
+        otp_code = str(random.randint(100000, 999999))
+        otp_expires_at = datetime.utcnow() + datetime.timedelta(minutes=10)  # OTP valid for 10 minutes
+
         # Create New User
-        new_user = User(email=email, password_hash=password_hash, can_access=True)
+        new_user = User(
+            email=email, 
+            password_hash=password_hash, 
+            can_access=True, 
+            otp_code=otp_code, 
+            otp_expires_at=otp_expires_at
+        )
         db.session.add(new_user)
         db.session.commit()
 
-        # Generate and Send OTP
-        otp = generate_otp(otp_secret)
-        send_otp_email(email, otp)
+        # Send OTP to email
+        send_otp_email(email, otp_code)
 
         # Store Email in Session
         session["pending_email"] = email
         session["otp_attempts"] = 0
         session.modified = True
 
-        print("Session Data:", session)  # Debugging
-
         return jsonify({"message": "User registered successfully. Redirecting to OTP page.", "redirect": "/auth/verify_otp_page"})
     
     except Exception as e:
-        print(f"Error: {e}")  # Debugging
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
-    
 @auth_bp.route("/verify_otp", methods=["POST"])
 def verify_otp():
     data = request.json
@@ -64,17 +70,20 @@ def verify_otp():
     if not user:
         return jsonify({"message": "User not found"}), 404
 
+    # Check OTP expiration
+    if user.otp_expires_at and user.otp_expires_at < datetime.utcnow():
+        return jsonify({"message": "OTP expired. Please request a new OTP."}), 403
+
     if session.get("otp_attempts", 0) >= 3:
         session.pop("pending_email", None)  
         session.pop("otp_attempts", None)
         return jsonify({"message": "Too many attempts. Please request a new OTP."}), 403
 
-    totp = pyotp.TOTP(user.otp_secret, interval=600)
-
-    if not totp.verify(user_otp):
+    if user.otp_code != user_otp:
         session["otp_attempts"] += 1  
         return jsonify({"message": "Invalid OTP. Try again."}), 400
 
+    # Mark user as verified
     user.is_verified = True
     db.session.commit()
 

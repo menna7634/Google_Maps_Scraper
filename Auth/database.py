@@ -18,11 +18,12 @@ mail = Mail(app)
 migrate = Migrate(app, db)
 
 class User(db.Model):
-    __tablename__ = "users"  # Avoid SQL reserved keyword conflict
+    __tablename__ = "users"  
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    otp_secret = db.Column(db.String(16), nullable=False)
+    otp_code = db.Column(db.String(6), nullable=True)  
+    otp_expires_at = db.Column(db.DateTime, nullable=True)  
     is_verified = db.Column(db.Boolean, default=False)
     can_access = db.Column(db.Boolean, default=True)
 
