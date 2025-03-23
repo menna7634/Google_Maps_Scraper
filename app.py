@@ -17,7 +17,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.config.from_object(Config)
 app.secret_key = os.urandom(24)  
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 # Flask-Session Configuration
 app.config["SESSION_TYPE"] = "filesystem"
