@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from flask import Flask, jsonify, render_template, request, send_file, redirect, send_from_directory, url_for, session
+import redis
 from scraper import scrape_google_maps
 from Auth.config import Config
 from flask_migrate import Migrate
@@ -16,14 +17,19 @@ from flask_socketio import SocketIO
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.config.from_object(Config)
-app.secret_key = os.urandom(24)  
+app.secret_key = Config.SECRET_KEY
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 # Flask-Session Configuration
-app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_TYPE"] = "redis"
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SECURE"] = False
+app.config["SESSION_USE_SIGNER"] = True  
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax" 
+app.config["SESSION_COOKIE_HTTPONLY"] = True  
+app.config["SESSION_COOKIE_SECURE"] = os.getenv("FLASK_ENV") == "production"
+redis_url = os.getenv("REDIS_URL") or os.getenv("REDIS_PUBLIC_URL")
+app.config["SESSION_REDIS"] = redis.from_url(redis_url)
+
 Session(app)
 
 db.init_app(app)
