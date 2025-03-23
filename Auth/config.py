@@ -6,7 +6,7 @@ class Config:
     # Database
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "postgresql://postgres:ycTIuAQfDQNwJSIFdXotuaIOiBuuArsY@postgres.railway.internal:5432/railway"
+        "postgresql://postgres:ycTIuAQfDQNwJSIFdXotuaIOiBuuArsY@gondola.proxy.rlwy.net:36767/railway"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

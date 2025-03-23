@@ -7,33 +7,50 @@ import bcrypt
 
 auth_bp = Blueprint("auth", __name__)
 
+# Route: Signup
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
-    data = request.json  
-    email = data.get("email")
-    password = data.get("password")
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"message": "Invalid JSON data"}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({"message": "User already exists"}), 400
+        email = data.get("email")
+        password = data.get("password")
 
-    otp_secret = pyotp.random_base32()
-    password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")  
+        if not email or not password:
+            return jsonify({"message": "Email and password are required"}), 400
 
-    new_user = User(email=email, password_hash=password_hash, otp_secret=otp_secret, can_access=True)
-    db.session.add(new_user)
-    db.session.commit()
+        # Check if user already exists
+        if User.query.filter_by(email=email).first():
+            return jsonify({"message": "User already exists"}), 400
 
-    otp = generate_otp(otp_secret)
-    send_otp_email(email, otp)
+        # Generate OTP Secret and Hash Password
+        otp_secret = pyotp.random_base32()
+        password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
-    session["pending_email"] = email  
-    session["otp_attempts"] = 0  
-    session.modified = True  
+        # Create New User
+        new_user = User(email=email, password_hash=password_hash, can_access=True)
+        db.session.add(new_user)
+        db.session.commit()
 
-    print("Session Data:", session)  
+        # Generate and Send OTP
+        otp = generate_otp(otp_secret)
+        send_otp_email(email, otp)
 
-    return jsonify({"message": "User registered successfully. Redirecting to OTP page.", "redirect": "/auth/verify_otp_page"})
- 
+        # Store Email in Session
+        session["pending_email"] = email
+        session["otp_attempts"] = 0
+        session.modified = True
+
+        print("Session Data:", session)  # Debugging
+
+        return jsonify({"message": "User registered successfully. Redirecting to OTP page.", "redirect": "/auth/verify_otp_page"})
+    
+    except Exception as e:
+        print(f"Error: {e}")  # Debugging
+        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+    
 @auth_bp.route("/verify_otp", methods=["POST"])
 def verify_otp():
     data = request.json
