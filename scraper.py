@@ -48,9 +48,12 @@ def scrape_google_maps(search_query):
      chrome_options.add_argument("--headless")  
      chrome_options.add_argument("--no-sandbox")
      chrome_options.add_argument("--disable-dev-shm-usage")
- 
+     chrome_options.add_argument("--disable-gpu") 
+
      service = Service(ChromeDriverManager().install())
      driver = webdriver.Chrome(service=service, options=chrome_options)
+     service.start()
+     print(service.path)
 
         # Connect to the Railway Chrome WebDriver (replace with actual Railway internal URL)
     # webdriver_url = os.getenv("RAILWAY_CHROME_URL", "http://standalone-chrome.railway.internal:4444/wd/hub")
