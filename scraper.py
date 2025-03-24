@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from flask import Flask, render_template, request, send_from_directory, jsonify
 import logging
+import threading
+from queue import Queue
 
 app = Flask(__name__)
 
@@ -21,12 +23,18 @@ logging.basicConfig(filename='scraping_errors.log', level=logging.ERROR)
 
 stop_scraping = False  # Flag to stop scraping
 scraping_count = 0  # Number of scrapes performed
+scraping_queue = Queue()  # Queue to handle scraping tasks asynchronously
 
-# Function to initialize the WebDriver
+# Initialize WebDriver globally to avoid re-initializing
+driver = None
+
+# Function to initialize the WebDriver (Singleton Pattern for reuse)
 def get_driver():
-    options = Options()
-    options.add_argument("--headless")  # Run in headless mode (without opening browser window)
-    driver = webdriver.Chrome(options=options)
+    global driver
+    if not driver:
+        options = Options()
+        options.add_argument("--headless")  # Run in headless mode (without opening browser window)
+        driver = webdriver.Chrome(options=options)
     return driver
 
 # Function to extract email from website using regex
@@ -47,21 +55,18 @@ def extract_email_from_website(website_url):
 
 # Function to scrape Google Maps search results using Selenium
 def scrape_google_maps(search_query):
-    global stop_scraping  # Use global variable to control stopping
+    global stop_scraping, scraping_count  # Use global variable to control stopping
 
-    safe_filename = f"{search_query.replace(' ', '_')}.csv"
+    safe_filename = f"{search_query.replace(' ', '_')}_{scraping_count}.csv"
     file_path = os.path.join(SCRAPING_DIR, safe_filename)
 
     driver = get_driver()
 
     try:
-        # Fetch the Google Maps search page
-        print(f"Navigating to Google Maps for search query: {search_query}")
+        print(f"Starting scraping for query: {search_query}")
         driver.get(f'https://www.google.com/maps/search/{search_query}/')
 
-        # Wait for the page to load
         time.sleep(2)
-
         results = []
 
         # Infinite scroll to load more results
@@ -160,20 +165,30 @@ def scrape_google_maps(search_query):
         driver.quit()  # Close the browser
 
 # Flask routes
-
 @app.route("/")
 def index():
     return render_template("index.html")
 
 @app.route("/start_scraping", methods=["POST"])
 def start_scraping():
-    search_query = request.form.get("query")
-    safe_filename = scrape_google_maps(search_query)
+    global stop_scraping, scraping_count
+    stop_scraping = False  # Reset flag for new scrape
+    scraping_count += 1  # Increment scrape count for unique filenames
 
+    search_query = request.form.get("query")
+
+    # Use threading for background scraping
+    thread = threading.Thread(target=run_scraping, args=(search_query,))
+    thread.start()
+
+    return jsonify({"message": f"Scraping started for {search_query}. It will run in the background."})
+
+def run_scraping(search_query):
+    safe_filename = scrape_google_maps(search_query)
     if safe_filename:
-        return jsonify({"message": f"Scraping completed! Results saved in {safe_filename}"})
+        print(f"Scraping completed! Results saved in {safe_filename}")
     else:
-        return jsonify({"message": "Error during scraping."})
+        print("Error during scraping.")
 
 @app.route("/stop_scraping", methods=["POST"])
 def stop_scraping_func():

@@ -10,3 +10,506 @@ INFO:werkzeug: * Detected change in 'C:\\Users\\Elnour Tech\\Downloads\\googlema
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 533-466-236
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:32:39] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:32:39] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:32:39] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:32:39] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+ERROR:app:Exception on /auth/login [POST]
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+ERROR:app:Request finalizing failed with an error while handling an error
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:32:50] "[35m[1mPOST /auth/login HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:33:20] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:33:20] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:33:20] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:33:20] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+ERROR:app:Exception on /auth/login [POST]
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+ERROR:app:Request finalizing failed with an error while handling an error
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:34:25] "[35m[1mPOST /auth/login HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:34:28] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:34:28] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:34:28] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:34:28] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:24] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:25] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+ERROR:app:Exception on /auth/login [POST]
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+ERROR:app:Request finalizing failed with an error while handling an error
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 963, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask\app.py", line 1322, in process_response
+    self.session_interface.save_session(self, ctx.session, response)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\base.py", line 305, in save_session
+    self._upsert_session(app.permanent_session_lifetime, session, store_id)
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\flask_session\redis\redis.py", line 81, in _upsert_session
+    self.client.set(
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\commands\core.py", line 2335, in set
+    return self.execute_command("SET", *pieces, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 1422, in get_connection
+    connection.connect()
+  File "C:\Users\Elnour Tech\Downloads\googlemaps-scrapper\venv\Lib\site-packages\redis\connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis.railway.internal:6379. getaddrinfo failed.
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:44] "[35m[1mPOST /auth/login HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:56] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:56] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:56] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:56] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:36:03] "GET /users_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:36:05] "GET /users_page HTTP/1.1" 200 -
