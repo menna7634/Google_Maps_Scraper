@@ -1,204 +1,170 @@
 import os
 import time
-import random
 import re
 import requests
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
 import pandas as pd
 from flask import Flask, render_template, request, send_from_directory, jsonify
-import logging
-import threading
-from queue import Queue
-
+from flask_socketio import SocketIO
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+ 
 app = Flask(__name__)
-
+socketio = SocketIO(app, cors_allowed_origins="*")
+ 
 SCRAPING_DIR = "Results"
 os.makedirs(SCRAPING_DIR, exist_ok=True)
-
-# Initialize logging for errors
-logging.basicConfig(filename='scraping_errors.log', level=logging.ERROR)
-
-stop_scraping = False  # Flag to stop scraping
-scraping_count = 0  # Number of scrapes performed
-scraping_queue = Queue()  # Queue to handle scraping tasks asynchronously
-
-# Initialize WebDriver globally to avoid re-initializing
-driver = None
-
-# Function to initialize the WebDriver (Singleton Pattern for reuse)
-def get_driver():
-    global driver
-    if not driver:
-        options = Options()
-        options.add_argument("--headless")  # Run in headless mode (without opening browser window)
-        driver = webdriver.Chrome(options=options)
-    return driver
-
-# Function to extract email from website using regex
+ 
+stop_scraping = False  
+scraping_count = 0  
+ 
 def extract_email_from_website(website_url):
-    """Extracts an email address from a website's HTML content."""
-    try:
-        headers = {"User-Agent": "Mozilla/5.0"}
-        response = requests.get(website_url, headers=headers, timeout=10)
-        response.raise_for_status()
-
-        email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-        emails = re.findall(email_pattern, response.text)
-
-        return emails[0] if emails else None
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error extracting email from {website_url}: {str(e)}")
-        return None
-
-# Function to scrape Google Maps search results using Selenium
+     """Extracts an email address from a website's HTML content."""
+     try:
+         headers = {"User-Agent": "Mozilla/5.0"}
+         response = requests.get(website_url, headers=headers, timeout=10)
+         response.raise_for_status()
+ 
+         email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+         emails = re.findall(email_pattern, response.text)
+ 
+         return emails[0] if emails else None
+     except requests.exceptions.RequestException:
+         return None
+ 
 def scrape_google_maps(search_query):
-    global stop_scraping, scraping_count  # Use global variable to control stopping
-
-    safe_filename = f"{search_query.replace(' ', '_')}_{scraping_count}.csv"
-    file_path = os.path.join(SCRAPING_DIR, safe_filename)
-
-    driver = get_driver()
-
-    try:
-        print(f"Starting scraping for query: {search_query}")
-        driver.get(f'https://www.google.com/maps/search/{search_query}/')
-
-        time.sleep(2)
-        results = []
-
-        # Infinite scroll to load more results
-        while not stop_scraping:
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-            items = soup.find_all('div', {'jsaction': 'rcuQ6b:npT2md'})
-
-            for item in items:
-                data = {}
-                try:
-                    data['Business Name'] = item.find("span", {"class": "fontHeadlineSmall"}).text
-                except Exception as e:
-                    logging.error(f"Error extracting Business Name: {str(e)}")
-                    data['Business Name'] = None
-
-                try:
-                    data['Address'] = item.find("span", {"class": "W4Efsd"}).text
-                except Exception as e:
-                    logging.error(f"Error extracting Address: {str(e)}")
-                    data['Address'] = None
-
-                try:
-                    category_element = item.find("span", {"class": "W4Efsd"})
-                    data['Category'] = category_element.text if category_element else None
-                except Exception as e:
-                    logging.error(f"Error extracting Category: {str(e)}")
-                    data['Category'] = None
-
-                try:
-                    data['Google Maps Link'] = item.find("a")['href']
-                except Exception as e:
-                    logging.error(f"Error extracting Google Maps Link: {str(e)}")
-                    data['Google Maps Link'] = None
-
-                try:
-                    website_element = item.find('a', {'class': 'lcr4fd'})
-                    website_url = website_element['href'] if website_element else None
-                    if website_url:
-                        data['Website'] = website_url
-                        data["Email"] = extract_email_from_website(website_url)
-                    else:
-                        data['Website'] = None
-                        data['Email'] = None
-                except Exception as e:
-                    logging.error(f"Error extracting Website or Email: {str(e)}")
-                    data['Website'] = None
-                    data['Email'] = None
-
-                try:
-                    data['Phone Number'] = item.find('span', {'class': 'UsdlK'}).text
-                except Exception as e:
-                    logging.error(f"Error extracting Phone Number: {str(e)}")
-                    data['Phone Number'] = None
-
-                try:
-                    data['Rating'] = item.find('span', {'class': 'MW4etd'}).text
-                except Exception as e:
-                    logging.error(f"Error extracting Rating: {str(e)}")
-                    data['Rating'] = None
-
-                try:
-                    num_reviews_element = item.find('span', {'dir': 'ltr'})
-                    data['Number of Reviews'] = num_reviews_element.text.strip("()") if num_reviews_element else None
-                except Exception as e:
-                    logging.error(f"Error extracting Number of Reviews: {str(e)}")
-                    data['Number of Reviews'] = None
-
-                if data['Business Name']:
-                    results.append(data)
-
-            # Scroll down to load more results
-            try:
-                body = driver.find_element_by_tag_name('body')
-                body.send_keys(Keys.PAGE_DOWN)
-                time.sleep(random.uniform(1.5, 3))  # Adding random delay between scrolls
-            except Exception as e:
-                logging.error(f"Error during scrolling: {str(e)}")
-                break
-
-        # Save results to CSV
-        try:
-            print(f"Saving results to CSV: {file_path}")
-            df = pd.DataFrame(results)
-            df.to_csv(file_path, index=False, encoding="utf-8-sig")
-        except Exception as e:
-            logging.error(f"Error saving CSV: {str(e)}")
-            return None
-
-        print(f"Scraping completed! {len(results)} items saved.")
-        return safe_filename
-
-    except Exception as e:
-        logging.error(f"Error during scraping: {str(e)}")
-        return None
-    finally:
-        driver.quit()  # Close the browser
-
-# Flask routes
+     """Scrapes Google Maps search results for businesses."""
+     global stop_scraping, scraping_count
+     stop_scraping = False  
+     scraping_count = 0  
+ 
+     safe_filename = f"{search_query.replace(' ', '_')}.csv"
+     file_path = os.path.join(SCRAPING_DIR, safe_filename)
+ 
+     chrome_options = webdriver.ChromeOptions()
+     chrome_options.add_argument("--headless")  
+     chrome_options.add_argument("--no-sandbox")
+     chrome_options.add_argument("--disable-dev-shm-usage")
+ 
+     service = Service(ChromeDriverManager().install())
+     driver = webdriver.Chrome(service=service, options=chrome_options)
+ 
+     driver.get(f'https://www.google.com/maps/search/{search_query}/')
+ 
+     try:
+         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "form:nth-child(2)"))).click()
+     except Exception:
+         pass
+ 
+     scrollable_div = driver.find_element(By.CSS_SELECTOR, 'div[role="feed"]')
+ 
+     for _ in range(15):  
+         if stop_scraping:
+             print("Scraping stopped by user!")
+             driver.quit()
+             return  
+         driver.execute_script("arguments[0].scrollBy(0, 1000);", scrollable_div)
+         time.sleep(1)
+ 
+     items = driver.find_elements(By.CSS_SELECTOR, 'div[role="feed"] > div > div[jsaction]')
+ 
+     results = []
+     for index, item in enumerate(items):
+         if stop_scraping:
+             print("Scraping interrupted, stopping...")
+             break  
+ 
+         data = {}
+         try:
+             data['Business Name'] = item.find_element(By.CSS_SELECTOR, ".fontHeadlineSmall").text
+         except:
+             data['Business Name'] = None
+ 
+         try:
+             data['Address'] = item.find_element(By.CSS_SELECTOR, '.W4Efsd > span:last-of-type span[dir="ltr"]').text
+         except:
+             data['Address'] = None
+ 
+         try:  
+             category_element = item.find_element(By.CSS_SELECTOR, '.W4Efsd > span:first-child span')
+             data['Category'] = category_element.text if category_element.text.strip() else None
+         except:
+             data['Category'] = None
+ 
+         try:
+             data['Google Maps Link'] = item.find_element(By.CSS_SELECTOR, "a").get_attribute('href')
+         except:
+             data['Google Maps Link'] = None
+ 
+         try:
+             website_element = item.find_element(By.CSS_SELECTOR, 'a.lcr4fd.S9kvJb')
+             website_url = website_element.get_attribute('href')
+             if website_url:
+                 data['Website'] = website_url
+                 data["Email"] = extract_email_from_website(website_url)
+             else:
+                 data['Website'] = None
+                 data['Email'] = None 
+         except:
+             data['Website'] = None
+             data['Email'] = None
+ 
+         try:
+             data['Phone Number'] = item.find_element(By.CSS_SELECTOR, '.UsdlK').text
+         except:
+             data['Phone Number'] = None
+ 
+         try:
+             data['Rating'] = item.find_element(By.CSS_SELECTOR, '.MW4etd').text
+         except:
+             data['Rating'] = None
+ 
+         try:
+          num_reviews_element = item.find_element(By.CSS_SELECTOR, '.UY7F9 span[dir="ltr"]')
+          data['Number of Reviews'] = num_reviews_element.text.strip("()") 
+         except:
+          data['Number of Reviews'] = None
+  
+ 
+ 
+         if data['Business Name']:
+             results.append(data)
+             scraping_count += 1  
+             socketio.emit("update_count", {"count": scraping_count})  
+ 
+     df = pd.DataFrame(results)
+     df.to_csv(file_path, index=False, encoding="utf-8-sig")
+ 
+     driver.quit()
+ 
+     if not stop_scraping:
+         socketio.emit("scraping_done", {"filename": safe_filename})  
+ 
+     print(f"Scraping completed! {scraping_count} items saved.")
+     return safe_filename
+ 
 @app.route("/")
 def index():
-    return render_template("index.html")
-
+     return render_template("index.html")
+ 
 @app.route("/start_scraping", methods=["POST"])
 def start_scraping():
-    global stop_scraping, scraping_count
-    stop_scraping = False  # Reset flag for new scrape
-    scraping_count += 1  # Increment scrape count for unique filenames
-
-    search_query = request.form.get("query")
-
-    # Use threading for background scraping
-    thread = threading.Thread(target=run_scraping, args=(search_query,))
-    thread.start()
-
-    return jsonify({"message": f"Scraping started for {search_query}. It will run in the background."})
-
-def run_scraping(search_query):
-    safe_filename = scrape_google_maps(search_query)
-    if safe_filename:
-        print(f"Scraping completed! Results saved in {safe_filename}")
-    else:
-        print("Error during scraping.")
-
+     search_query = request.form.get("query")
+     socketio.start_background_task(scrape_google_maps, search_query)
+     return jsonify({"message": "Scraping started!"})
+ 
 @app.route("/stop_scraping", methods=["POST"])
 def stop_scraping_func():
-    global stop_scraping
-    stop_scraping = True  # Set flag to stop scraping
-    return jsonify({"message": "Scraping stopping in progress..."})
-
+     global stop_scraping
+     stop_scraping = True
+     return jsonify({"message": "Scraping stopping in progress..."})
+ 
 @app.route("/download/<filename>")
 def download(filename):
-    return send_from_directory(SCRAPING_DIR, filename, as_attachment=True)
-
+     return send_from_directory(SCRAPING_DIR, filename, as_attachment=True)
+ 
 if __name__ == "__main__":
-    app.run(debug=True)
+     socketio.run(app, debug=True)

@@ -513,3 +513,8 @@ INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:56] "[36mGET /logo.png HTTP/1.1
 INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:35:56] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:36:03] "GET /users_page HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 07:36:05] "GET /users_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 08:14:34] "GET /users_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 08:14:40] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 08:14:40] "GET /login_page HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 08:14:40] "[36mGET /logo.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Mar/2025 08:14:40] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
