@@ -49,8 +49,17 @@ def scrape_google_maps(search_query):
      chrome_options.add_argument("--no-sandbox")
      chrome_options.add_argument("--disable-dev-shm-usage")
  
-     service = Service(ChromeDriverManager().install())
-     driver = webdriver.Chrome(service=service, options=chrome_options)
+     #service = Service(ChromeDriverManager().install())
+     #driver = webdriver.Chrome(service=service, options=chrome_options)
+
+        # Connect to the Railway Chrome WebDriver (replace with actual Railway internal URL)
+     webdriver_url = os.getenv("RAILWAY_CHROME_URL", "http://standalone-chrome.railway.internal:4444/wd/hub")
+
+     driver = webdriver.Remote(
+        command_executor=webdriver_url,
+        options=chrome_options
+    )
+
  
      driver.get(f'https://www.google.com/maps/search/{search_query}/')
  
