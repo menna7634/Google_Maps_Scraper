@@ -9,7 +9,6 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import pandas as pd
 from flask import Flask, render_template, request, send_from_directory, jsonify
-from threading import Thread, Lock
 import logging
 
 app = Flask(__name__)
@@ -22,7 +21,6 @@ logging.basicConfig(filename='scraping_errors.log', level=logging.ERROR)
 
 stop_scraping = False  # Flag to stop scraping
 scraping_count = 0  # Number of scrapes performed
-scraping_lock = Lock()  # Lock to protect access to stop_scraping
 
 # Function to initialize the WebDriver
 def get_driver():
@@ -170,24 +168,17 @@ def index():
 @app.route("/start_scraping", methods=["POST"])
 def start_scraping():
     search_query = request.form.get("query")
-    
-    def background_scraping():
-        global stop_scraping
-        with scraping_lock:  # Ensure thread safety
-            stop_scraping = False  # Reset stop flag when starting new scrape
-        scrape_google_maps(search_query)
-    
-    # Run the scraping in a background thread
-    thread = Thread(target=background_scraping)
-    thread.start()
+    safe_filename = scrape_google_maps(search_query)
 
-    return jsonify({"message": "Scraping started!"})
+    if safe_filename:
+        return jsonify({"message": f"Scraping completed! Results saved in {safe_filename}"})
+    else:
+        return jsonify({"message": "Error during scraping."})
 
 @app.route("/stop_scraping", methods=["POST"])
 def stop_scraping_func():
     global stop_scraping
-    with scraping_lock:  # Ensure thread safety
-        stop_scraping = True  # Set flag to stop scraping
+    stop_scraping = True  # Set flag to stop scraping
     return jsonify({"message": "Scraping stopping in progress..."})
 
 @app.route("/download/<filename>")
