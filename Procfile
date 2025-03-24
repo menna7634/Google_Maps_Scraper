@@ -1,1 +1,2 @@
-web: pip install -r requirements.txt && playwright install && gunicorn -k eventlet -w 1 app:app --bind 0.0.0.0:$PORT
+web: pip install -r requirements.txt && playwright install && uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1
+
